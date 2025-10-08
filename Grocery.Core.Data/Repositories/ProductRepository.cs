@@ -13,7 +13,7 @@ namespace Grocery.Core.Data.Repositories
                 new Product(1, "Melk", 300, new DateOnly(2025, 9, 25), 1.49m),
                 new Product(2, "Kaas", 100, new DateOnly(2025, 9, 30), 3.99m),
                 new Product(3, "Brood", 400, new DateOnly(2025, 9, 12), 2.29m),
-                new Product(4, "Cornflakes", 0, new DateOnly(2025, 12, 31), 4.59m)
+                new Product(4, "Cornflakes", 500, new DateOnly(2025, 12, 31), 4.59m)
             ];
         }
 
