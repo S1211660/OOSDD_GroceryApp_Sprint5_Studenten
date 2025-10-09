@@ -1,4 +1,6 @@
 ﻿using System.Collections.ObjectModel;
+using System.Linq;
+using CommunityToolkit.Mvvm.Input;
 using Grocery.Core.Interfaces.Services;
 using Grocery.Core.Models;
 
@@ -9,9 +11,12 @@ namespace Grocery.App.ViewModels
     public partial class ProductCategoriesViewModel : BaseViewModel
     {
         private readonly IProductCategoryService _productCategoryService;
-        private ObservableCollection<Product> _products = new();
+        private ObservableCollection<Product> _inCategory = new();
+        private ObservableCollection<Product> _available = new();
+        private ObservableCollection<Product> _filteredAvailable = new();
         private string _categoryName = string.Empty;
         private int _categoryId;
+        private string _searchText = string.Empty;
 
         public int CategoryId
         {
@@ -34,13 +39,45 @@ namespace Grocery.App.ViewModels
             }
         }
 
-        public ObservableCollection<Product> Products
+        public ObservableCollection<Product> InCategory
         {
-            get => _products;
+            get => _inCategory;
             set
             {
-                _products = value;
+                _inCategory = value;
                 OnPropertyChanged();
+            }
+        }
+
+        public ObservableCollection<Product> Available
+        {
+            get => _available;
+            set
+            {
+                _available = value;
+                OnPropertyChanged();
+                ApplyFilter();
+            }
+        }
+
+        public ObservableCollection<Product> FilteredAvailable
+        {
+            get => _filteredAvailable;
+            set
+            {
+                _filteredAvailable = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public string SearchText
+        {
+            get => _searchText;
+            set
+            {
+                _searchText = value;
+                OnPropertyChanged();
+                ApplyFilter();
             }
         }
 
@@ -51,8 +88,37 @@ namespace Grocery.App.ViewModels
 
         private void LoadProducts()
         {
-            var products = _productCategoryService.GetProductsByCategory(CategoryId);
-            Products = new ObservableCollection<Product>(products);
+            var inCat = _productCategoryService.GetProductsByCategory(CategoryId);
+            InCategory = new ObservableCollection<Product>(inCat);
+
+            var notInCat = _productCategoryService.GetProductsNotInCategory(CategoryId);
+            Available = new ObservableCollection<Product>(notInCat);
+        }
+
+        private void ApplyFilter()
+        {
+            if (string.IsNullOrWhiteSpace(SearchText))
+            {
+                FilteredAvailable = new ObservableCollection<Product>(Available);
+            }
+            else
+            {
+                var q = SearchText.Trim().ToLowerInvariant();
+                FilteredAvailable = new ObservableCollection<Product>(
+                    Available.Where(p => p.Name.ToLowerInvariant().Contains(q))
+                );
+            }
+        }
+
+        [RelayCommand]
+        private void AddToCategory(Product? product)
+        {
+            if (product == null) return;
+
+            _productCategoryService.AddProductToCategory(CategoryId, product.Id);
+            Available.Remove(product);
+            InCategory.Add(product);
+            ApplyFilter();
         }
     }
 }

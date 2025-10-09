@@ -36,6 +36,21 @@ namespace Grocery.Core.Services
             return products;
         }
 
+        public List<Product> GetProductsNotInCategory(int categoryId)
+        {
+            var allProducts = _productRepository.GetAll();
+            var inCat = GetProductsByCategory(categoryId).Select(p => p.Id).ToHashSet();
+            return allProducts.Where(p => !inCat.Contains(p.Id)).ToList();
+        }
+
+        public ProductCategory AddProductToCategory(int categoryId, int productId)
+        {
+            var all = _productCategoryRepository.GetAll();
+            int nextId = (all.Any() ? all.Max(pc => pc.Id) : 0) + 1;
+            var mapping = new ProductCategory(nextId, categoryId, productId);
+            return _productCategoryRepository.Add(mapping);
+        }
+
         public List<ProductCategory> GetAll()
         {
             return _productCategoryRepository.GetAll();

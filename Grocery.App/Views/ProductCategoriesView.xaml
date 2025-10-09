@@ -7,49 +7,58 @@
              x:DataType="vm:ProductCategoriesViewModel"
              Title="{Binding CategoryName}">
 
-    <Grid RowDefinitions="Auto,Auto,*" Padding="20">
-        <Label Grid.Row="0" 
-               Text="{Binding CategoryName}" 
-               FontSize="24" 
+    <Grid RowDefinitions="Auto,Auto,*" ColumnDefinitions="*,*" Padding="12">
+        <Label Grid.Row="0" Grid.ColumnSpan="2"
+               Text="{Binding CategoryName}"
+               FontSize="24"
                FontAttributes="Bold"
-               Margin="0,0,0,10"/>
+               Margin="0,0,0,8" />
 
-        <Label Grid.Row="1" 
-               Text="Producten in deze categorie:" 
-               FontSize="16"
-               Margin="0,0,0,20"/>
+        <SearchBar Grid.Row="1" Grid.Column="1"
+                   Placeholder="Zoek product..."
+                   Text="{Binding SearchText}" />
 
-        <CollectionView Grid.Row="2" 
-                       ItemsSource="{Binding Products}">
-            <CollectionView.ItemTemplate>
-                <DataTemplate x:DataType="models:Product">
-                    <Frame Padding="15" 
-                           Margin="0,5"
-                           BorderColor="LightGray"
-                           CornerRadius="10"
-                           HasShadow="True">
-                        <Grid ColumnDefinitions="*,Auto,Auto">
-                            <Label Grid.Column="0" 
-                                   Text="{Binding Name}" 
-                                   FontSize="18"
-                                   VerticalOptions="Center"/>
+        <VerticalStackLayout Grid.Row="2" Grid.Column="0" Spacing="8">
+            <Label Text="In categorie" FontAttributes="Bold" FontSize="18" />
+            <CollectionView ItemsSource="{Binding InCategory}">
+                <CollectionView.EmptyView>
+                    <Label Text="Nog geen producten in deze categorie."
+                           TextColor="Gray" HorizontalOptions="Center" Margin="12"/>
+                </CollectionView.EmptyView>
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="models:Product">
+                        <Frame Padding="10" Margin="0,0,0,8" HasShadow="False" BorderColor="{DynamicResource Gray300}">
+                            <Grid ColumnDefinitions="*,Auto">
+                                <Label Grid.Column="0" Text="{Binding Name}" FontSize="16" VerticalOptions="Center"/>
+                                <Label Grid.Column="1" Text="{Binding Stock, StringFormat='Voorraad: {0}'}" TextColor="Gray" VerticalOptions="Center"/>
+                            </Grid>
+                        </Frame>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </VerticalStackLayout>
 
-                            <Label Grid.Column="1" 
-                                   Text="{Binding Price, StringFormat='€ {0:F2}'}" 
-                                   FontSize="16"
-                                   TextColor="Green"
-                                   Margin="10,0"
-                                   VerticalOptions="Center"/>
-
-                            <Label Grid.Column="2" 
-                                   Text="{Binding Stock, StringFormat='Voorraad: {0}'}" 
-                                   FontSize="14"
-                                   TextColor="Gray"
-                                   VerticalOptions="Center"/>
-                        </Grid>
-                    </Frame>
-                </DataTemplate>
-            </CollectionView.ItemTemplate>
-        </CollectionView>
+        <VerticalStackLayout Grid.Row="2" Grid.Column="1" Spacing="8">
+            <Label Text="Beschikbaar om toe te voegen" FontAttributes="Bold" FontSize="18" />
+            <CollectionView ItemsSource="{Binding FilteredAvailable}" x:Name="AvailableList">
+                <CollectionView.EmptyView>
+                    <Label Text="Er is niets meer beschikbaar om toe te voegen."
+                           TextColor="Gray" HorizontalOptions="Center" Margin="12"/>
+                </CollectionView.EmptyView>
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="models:Product">
+                        <Frame Padding="10" Margin="0,0,0,8" HasShadow="False" BorderColor="{DynamicResource Gray300}">
+                            <Grid ColumnDefinitions="*,Auto">
+                                <Label Grid.Column="0" Text="{Binding Name}" FontSize="16" VerticalOptions="Center"/>
+                                <Button Grid.Column="1"
+                                        Text="Toevoegen"
+                                        Command="{Binding Source={RelativeSource AncestorType={x:Type vm:ProductCategoriesViewModel}}, Path=AddToCategoryCommand}"
+                                        CommandParameter="{Binding .}" />
+                            </Grid>
+                        </Frame>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </VerticalStackLayout>
     </Grid>
 </ContentPage>
