@@ -17,5 +17,8 @@
         <Tab Title="Meest verkocht" Icon="investment.png">
             <ShellContent Title="Meest verkochte producten" ContentTemplate="{DataTemplate local:BestSellingProductsView}" />
         </Tab>
+        <Tab Title="Categorieën">
+            <ShellContent Title="Categorieën" ContentTemplate="{DataTemplate local:CategoriesView}" Route="CategoriesView" Icon="{OnPlatform 'icon_about.png', iOS='icon_about.png', MacCatalyst='icon_about.png'}" />
+         </Tab>
     </TabBar>
 </Shell>

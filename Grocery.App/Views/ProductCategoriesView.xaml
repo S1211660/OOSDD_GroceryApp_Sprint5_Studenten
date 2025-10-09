@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:Grocery.App.ViewModels"
+             xmlns:models="clr-namespace:Grocery.Core.Models;assembly=Grocery.Core"
+             x:Class="Grocery.App.Views.ProductCategoriesView"
+             x:DataType="vm:ProductCategoriesViewModel"
+             Title="{Binding CategoryName}">
+
+    <Grid RowDefinitions="Auto,Auto,*" Padding="20">
+        <Label Grid.Row="0" 
+               Text="{Binding CategoryName}" 
+               FontSize="24" 
+               FontAttributes="Bold"
+               Margin="0,0,0,10"/>
+
+        <Label Grid.Row="1" 
+               Text="Producten in deze categorie:" 
+               FontSize="16"
+               Margin="0,0,0,20"/>
+
+        <CollectionView Grid.Row="2" 
+                       ItemsSource="{Binding Products}">
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="models:Product">
+                    <Frame Padding="15" 
+                           Margin="0,5"
+                           BorderColor="LightGray"
+                           CornerRadius="10"
+                           HasShadow="True">
+                        <Grid ColumnDefinitions="*,Auto,Auto">
+                            <Label Grid.Column="0" 
+                                   Text="{Binding Name}" 
+                                   FontSize="18"
+                                   VerticalOptions="Center"/>
+
+                            <Label Grid.Column="1" 
+                                   Text="{Binding Price, StringFormat='€ {0:F2}'}" 
+                                   FontSize="16"
+                                   TextColor="Green"
+                                   Margin="10,0"
+                                   VerticalOptions="Center"/>
+
+                            <Label Grid.Column="2" 
+                                   Text="{Binding Stock, StringFormat='Voorraad: {0}'}" 
+                                   FontSize="14"
+                                   TextColor="Gray"
+                                   VerticalOptions="Center"/>
+                        </Grid>
+                    </Frame>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+    </Grid>
+</ContentPage>
