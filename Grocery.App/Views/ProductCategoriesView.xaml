@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:Grocery.App.ViewModels"
+             xmlns:models="clr-namespace:Grocery.Core.Models;assembly=Grocery.Core"
+             x:Class="Grocery.App.Views.ProductCategoriesView"
+             x:DataType="vm:ProductCategoriesViewModel"
+             Title="{Binding CategoryName}">
+
+    <Grid RowDefinitions="Auto,Auto,*" ColumnDefinitions="*,*" Padding="12">
+        <Label Grid.Row="0" Grid.ColumnSpan="2"
+               Text="{Binding CategoryName}"
+               FontSize="24"
+               FontAttributes="Bold"
+               Margin="0,0,0,8" />
+
+        <SearchBar Grid.Row="1" Grid.Column="1"
+                   Placeholder="Zoek product..."
+                   Text="{Binding SearchText}" />
+
+        <VerticalStackLayout Grid.Row="2" Grid.Column="0" Spacing="8">
+            <Label Text="In categorie" FontAttributes="Bold" FontSize="18" />
+            <CollectionView ItemsSource="{Binding InCategory}">
+                <CollectionView.EmptyView>
+                    <Label Text="Nog geen producten in deze categorie."
+                           TextColor="Gray" HorizontalOptions="Center" Margin="12"/>
+                </CollectionView.EmptyView>
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="models:Product">
+                        <Frame Padding="10" Margin="0,0,0,8" HasShadow="False" BorderColor="{DynamicResource Gray300}">
+                            <Grid ColumnDefinitions="*,Auto">
+                                <Label Grid.Column="0" Text="{Binding Name}" FontSize="16" VerticalOptions="Center"/>
+                                <Label Grid.Column="1" Text="{Binding Stock, StringFormat='Voorraad: {0}'}" TextColor="Gray" VerticalOptions="Center"/>
+                            </Grid>
+                        </Frame>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </VerticalStackLayout>
+
+        <VerticalStackLayout Grid.Row="2" Grid.Column="1" Spacing="8">
+            <Label Text="Beschikbaar om toe te voegen" FontAttributes="Bold" FontSize="18" />
+            <CollectionView ItemsSource="{Binding FilteredAvailable}" x:Name="AvailableList">
+                <CollectionView.EmptyView>
+                    <Label Text="Er is niets meer beschikbaar om toe te voegen."
+                           TextColor="Gray" HorizontalOptions="Center" Margin="12"/>
+                </CollectionView.EmptyView>
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="models:Product">
+                        <Frame Padding="10" Margin="0,0,0,8" HasShadow="False" BorderColor="{DynamicResource Gray300}">
+                            <Grid ColumnDefinitions="*,Auto">
+                                <Label Grid.Column="0" Text="{Binding Name}" FontSize="16" VerticalOptions="Center"/>
+                                <Button Grid.Column="1"
+                                        Text="Toevoegen"
+                                        Command="{Binding Source={RelativeSource AncestorType={x:Type vm:ProductCategoriesViewModel}}, Path=AddToCategoryCommand}"
+                                        CommandParameter="{Binding .}" />
+                            </Grid>
+                        </Frame>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </VerticalStackLayout>
+    </Grid>
+</ContentPage>

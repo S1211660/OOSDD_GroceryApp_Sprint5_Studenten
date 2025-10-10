@@ -1,57 +1,75 @@
-#GroceryApp sprint5 Studentversie  
-Dit is de startversie voor studenten voor sprint 5.  
- 
-UC15 Toevoegen THT datum aan product is compleet.  
+# BoodschappenApp (GroceryApp) - Sprint 5
 
-UC14 Toevoegen prijzen:  
-- Prijs toevoegen aan product class en uitbreiden constructor chain.  
-- ProductRepository --> prijsveld vullen met waarden.  
-- ProductView uitbreiden met kolom voor de prijs (header en inhoud van de tabel).      
+Een applicatie voor het beheren van boodschappenlijsten met uitgebreide product management functionaliteit.
 
-UC12 Productcategoriën toevoegen --> zelfstandig uitwerken:  
-Ontwerp:
->```mermaid
->classDiagram
->direction LR
->    class Product {
->	    +int Id
->	    +string Name
->	    +int Stock
->	    +DateOnly ShelfLife
->	    +Decimal Price
->   }
->    class ProductCategory {
->	    +int Id
->	    +string Name
->	    +int ProductId
->	    +int CategoryId
->    }
->    class Category {
->	    +int Id
->	    +string Name
->    }
->
->    Product "1" -- "*" ProductCategory
->    ProductCategory "*" -- "1" Category
-> ```
-Stappenplan:  
-- Maak class Category  
-- Maak class ProductCategory  
-- Maak Interface en Repository voor Category  
-- Maak Interface en Repository voor ProductCategory  
-- Maak Interface en Service voor Category  
-- Maak Interface en Service voor ProductCategory  
-- Registreer de gemaakte Repo's en services in MauiProgramm  
-- Maak CategoriesViewModel.  
-- Maak CategoriesView.  
-- Registreer De view en het ViewModel in MauiProgramm.  
-- Maak een menu entry in de tabbar in AppShell.xaml en registreer route in AppShell.xaml.cs  
-- Maak ProductCategoriesViewModel.  
-- Maak ProductCategoriesView.  
-- Registreer De view en het ViewModel in MauiProgramm.  
-- Zorg dat de ProductCategoriesView gestart kan worden na het klikken op een Category in CategoriesView  
-- Registreer route naar ProductCategoriesView in AppShell.xaml.cs  
+## Functionaliteiten
 
+### Eerdere Sprints
+- **UC1-UC3:** Tonen van boodschappenlijsten, boodschappenlijstitems en producten
+- **UC4:** Kleur van boodschappenlijst aanpassen
+- **UC5:** Producten toevoegen aan boodschappenlijst
+- **UC6:** Inlogfunctionaliteit voor gebruikers
+- **UC7:** Delen boodschappenlijst
+- **UC8:** Zoeken producten
+- **UC9:** Registratiescherm
+- **UC10:** Product aantal aanpassen in boodschappenlijst (plus/min knoppen)
+- **UC11:** Meest verkochte producten tonen
+- **UC13:** Aantal klanten per product tonen (alleen voor Admin rol)
 
+### Sprint 5 (Week 6) - Nieuw
+- **UC12:** Productcategorieën toevoegen en koppelen aan producten
+- **UC14:** Prijzen toevoegen aan producten
+- **UC15:** THT (Tenminste Houdbaar Tot) datum toevoegen en beheren
 
+## Development Workflow (GitFlow)
 
+Deze applicatie gebruikt **GitFlow** als branching strategie voor ontwikkeling.
+
+### Branch Structuur
+
+- **`main`** - Productie-klare releases
+- **`development`** - Ontwikkel branch
+- **`feature/*`** - Nieuwe functionaliteiten (bijv. `feature/UC12-productcategorieen`)
+- **`hotfix/*`** - Kritieke fixes voor productie
+
+### Commit Conventies
+
+- **feat:** nieuwe functionaliteit (`feat(UC12): voeg productcategorieën toe`)
+- **fix:** bug fix (`fix(UC14): valideer prijs input correct`)
+- **docs:** documentatie wijzigingen (`docs: update README voor sprint 5`)
+
+## Test Pipeline
+
+- **Automatische tests** bij elke Pull Request naar `main` of `development`
+- **GitHub Actions workflow** in `.github/workflows/maui_unit_tests.yaml`
+- Test resultaten beschikbaar als artifact in GitHub Actions
+
+## Versioning
+
+Deze sprint: **v1.4.0** (Minor release - nieuwe functionaliteit)
+
+- **Major:** Breaking changes (bijv. database migratie) → v2.0.0
+- **Minor:** Nieuwe functionaliteit (bijv. UC12, UC14, UC15) → v1.4.0
+- **Patch:** Bug fixes (bijv. hotfix voor crash) → v1.4.1
+
+## Belangrijke Sprint 5 Features
+
+### UC12: Productcategorieën
+- Categorieën aanmaken en beheren
+- Producten koppelen aan categorieën
+- Categorie-kleuren voor visuele identificatie
+- Producten filteren op categorie
+
+### UC14: Prijsinformatie
+- Prijzen tonen per product
+- Prijsgeschiedenis bijhouden
+- Totaalberekening boodschappenlijst
+
+### UC15: THT Datum Management
+- THT datum per product
+- Waarschuwingen voor verlopen producten
+- Sorteren op vervaldatum
+
+## Licentie
+
+MIT License
